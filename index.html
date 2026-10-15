@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr. Rocha’s English Class: Speaking and Fluency</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        
+        .shiny-blue {
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
+            border: 2px solid #3b82f6 !important;
+            border-radius: 0.375rem;
+            outline: none;
+        }
+        
+        .section-container { display: none; }
+        .section-container.active { display: block; animation: fadeIn 0.5s; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Puzzle Grid */
+        .puzzle-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1;
+            background: #ccc;
+            border: 2px solid #333;
+        }
+        .puzzle-piece {
+            width: 100%;
+            height: 100%;
+            background-size: 400% 400%;
+            cursor: pointer;
+            border: 1px solid #fff;
+        }
+
+        /* Scrambled Words */
+        .word-pool { min-height: 50px; border: 2px dashed #ccc; padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+        .word-target { min-height: 50px; border: 2px dashed #3b82f6; padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .word-tile { background: #e5e7eb; padding: 5px 10px; border-radius: 5px; cursor: pointer; user-select: none; }
+        .dark .word-tile { background: #374151; color: #fff; }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; color: black !important; }
+            .section-container { display: block !important; page-break-after: always; }
+            #results-section { display: block !important; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+
+    <!-- Header & Progress -->
+    <header class="sticky top-0 z-50 bg-white dark:bg-gray-800 shadow-md p-4 no-print">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold text-blue-600 dark:text-blue-400">Mr. Rocha’s English Class</h1>
+            <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                <i class="fas fa-moon dark:hidden"></i>
+                <i class="fas fa-sun hidden dark:inline text-yellow-400"></i>
+            </button>
+        </div>
+        <div class="max-w-5xl mx-auto mt-2 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+            <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-5xl mx-auto w-full p-4 sm:p-6 shadow-lg bg-white dark:bg-gray-800 mt-4 rounded-lg mb-10">
+        
+        <!-- Intro Section -->
+        <section id="sec-intro" class="section-container active">
+            <h2 class="text-3xl font-bold mb-6 text-center">Speaking and Fluency Worksheet</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Student Name:</label>
+                    <input type="text" id="student-name" class="w-full p-3 bg-white dark:bg-gray-700 shiny-blue text-black dark:text-white" placeholder="Enter your full name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Date:</label>
+                    <input type="date" id="student-date" class="w-full p-3 bg-white dark:bg-gray-700 shiny-blue text-black dark:text-white">
+                </div>
+            </div>
+
+            <div class="mb-8 text-center">
+                <img src="Image1.jpg" alt="Intro Image" onerror="this.src='https://placehold.co/600x300/3b82f6/ffffff?text=Image+1'" class="mx-auto rounded-lg shadow-md max-w-full h-auto">
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="nav('sec-1')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded shadow">Start Activity 1 <i class="fas fa-arrow-right ml-2"></i></button>
+            </div>
+        </section>
+
+        <!-- Activity 1 -->
+        <section id="sec-1" class="section-container">
+            <h2 class="text-2xl font-bold mb-4">Activity 1: Video Observation</h2>
+            <p class="mb-4">Watch the video. Take notes and tell Mr. Rocha what the video was about.</p>
+            
+            <div class="mb-6 flex justify-center">
+                <!-- Fallback to placeholder if video missing -->
+                <video src="Video1.mp4" controls class="max-w-full h-auto rounded-lg shadow border dark:border-gray-600 w-full md:w-3/4" poster="https://placehold.co/600x350/000000/ffffff?text=Video+1+Placeholder"></video>
+            </div>
+
+            <textarea id="act1-notes" rows="5" class="w-full p-3 bg-white dark:bg-gray-700 shiny-blue text-black dark:text-white mb-4" placeholder="Type your notes here..."></textarea>
+            
+            <div class="flex justify-between items-center border-t pt-4 border-gray-200 dark:border-gray-700">
+                <button onclick="nav('sec-intro')" class="text-blue-600 dark:text-blue-400 font-medium"><i class="fas fa-arrow-left mr-1"></i> Back</button>
+                <div class="space-x-2">
+                    <button onclick="checkAct1()" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded">Check Answer</button>
+                    <button onclick="nav('sec-2')" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">Next <i class="fas fa-arrow-right ml-1"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity 2: Image Scramble -->
+        <section id="sec-2" class="section-container">
+            <h2 class="text-2xl font-bold mb-4">Activity 2: Scrambled Image & Description</h2>
+            
+            <div class="flex flex-col md:flex-row gap-6 mb-6 items-start">
+                <div class="w-full md:w-1/2">
+                    <h3 class="font-semibold mb-2">Puzzle <span id="timer2" class="text-red-500 font-mono ml-2">00:00</span></h3>
+                    <div id="puzzle-board-2" class="puzzle-board mx-auto"></div>
+                    <button onclick="initPuzzle(2)" class="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-4 rounded text-sm w-full">Do Again</button>
+                </div>
+                <div class="w-full md:w-1/2 text-center">
+                    <h3 class="font-semibold mb-2">Target Image</h3>
+                    <img src="Image2.jpg" onerror="this.src='https://placehold.co/400x400/10b981/ffffff?text=Image+2'" class="mx-auto rounded shadow opacity-90 border" style="width: 90%; max-width: 360px;" id="target-img-2">
+                </div>
+            </div>
+
+            <p class="mb-2 font-medium">Tell Mr. Rocha what you see in the image and what you think is happening.</p>
+            <textarea id="act2-notes" rows="4" class="w-full p-3 bg-white dark:bg-gray-700 shiny-blue text-black dark:text-white mb-4" placeholder="Describe the image..."></textarea>
+            
+            <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded mb-6">
+                <h4 class="font-bold text-sm mb-2">Sentence Frames (A2 Level):</h4>
+                <ul class="list-disc pl-5 text-sm space-y-1">
+                    <li>In this picture, I can see...</li>
+                    <li>There is / There are...</li>
+                    <li>The people are [verb + ing]...</li>
+                    <li>I think they are...</li>
+                    <li>The weather looks...</li>
+                    <li>In the background, there is...</li>
+                    <li>He/She is wearing...</li>
+                    <li>It seems like they feel...</li>
+                </ul>
+            </div>
+
+            <div class="flex justify-between items-center border-t pt-4 border-gray-200 dark:border-gray-700">
+                <button onclick="nav('sec-1')" class="text-blue-600 dark:text-blue-400 font-medium"><i class="fas fa-arrow-left mr-1"></i> Back</button>
+                <div class="space-x-2">
+                    <button onclick="checkAct2()" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded">Check Answer</button>
+                    <button onclick="nav('sec-3')" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">Next <i class="fas fa-arrow-right ml-1"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity 3: Image Scramble -->
+        <section id="sec-3" class="section-container">
+            <h2 class="text-2xl font-bold mb-4">Activity 3: Scrambled Image & Description</h2>
+            
+            <div class="flex flex-col md:flex-row gap-6 mb-6 items-start">
+                <div class="w-full md:w-1/2">
+                    <h3 class="font-semibold mb-2">Puzzle <span id="timer3" class="text-red-500 font-mono ml-2">00:00</span></h3>
+                    <div id="puzzle-board-3" class="puzzle-board mx-auto"></div>
+                    <button onclick="initPuzzle(3)" class="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-4 rounded text-sm w-full">Do Again</button>
+                </div>
+                <div class="w-full md:w-1/2 text-center">
+                    <h3 class="font-semibold mb-2">Target Image</h3>
+                    <img src="Image3.jpg" onerror="this.src='https://placehold.co/400x400/8b5cf6/ffffff?text=Image+3'" class="mx-auto rounded shadow opacity-90 border" style="width: 90%; max-width: 360px;" id="target-img-3">
+                </div>
+            </div>
+
+            <p class="mb-2 font-medium">Tell Mr. Rocha what you see in the image and what you think is happening.</p>
+            <textarea id="act3-notes" rows="4" class="w-full p-3 bg-white dark:bg-gray-700 shiny-blue text-black dark:text-white mb-4" placeholder="Describe the image..."></textarea>
+            
+            <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded mb-6">
+                <h4 class="font-bold text-sm mb-2">Sentence Frames (A2 Level):</h4>
+                <ul class="list-disc pl-5 text-sm space-y-1">
+                    <li>In this picture, I can see...</li>
+                    <li>There is / There are...</li>
+                    <li>The people are [verb + ing]...</li>
+                    <li>I think they are...</li>
+                    <li>The weather looks...</li>
+                    <li>In the background, there is...</li>
+                    <li>He/She is wearing...</li>
+                    <li>It seems like they feel...</li>
+                </ul>
+            </div>
+
+            <div class="flex justify-between items-center border-t pt-4 border-gray-200 dark:border-gray-700">
+                <button onclick="nav('sec-2')" class="text-blue-600 dark:text-blue-400 font-medium"><i class="fas fa-arrow-left mr-1"></i> Back</button>
+                <div class="space-x-2">
+                    <button onclick="checkAct3()" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded">Check Answer</button>
+                    <button onclick="nav('sec-4')" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">Next <i class="fas fa-arrow-right ml-1"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity 4: Conversation -->
+        <section id="sec-4" class="section-container">
+            <h2 class="text-2xl font-bold mb-4">Activity 4: C1 Conversation</h2>
+            <p class="mb-6">Complete the conversation by selecting the correct responses for Person B. Options will be crossed out once selected.</p>
+            
+            <div id="conversation-container" class="space-y-4 mb-6 text-sm md:text-base">
+                <!-- Generated via JS -->
+            </div>
+
+            <div class="flex justify-between items-center border-t pt-4 border-gray-200 dark:border-gray-700">
+                <button onclick="nav('sec-3')" class="text-blue-600 dark:text-blue-400 font-medium"><i class="fas fa-arrow-left mr-1"></i> Back</button>
+                <div class="space-x-2">
+                    <button onclick="checkAct4()" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded">Check Answers</button>
+                    <button onclick="nav('sec-5')" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">Next <i class="fas fa-arrow-right ml-1"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity 5: Reading Text -->
+        <section id="sec-5" class="section-container">
+            <h2 class="text-2xl font-bold mb-4">Activity 5: Reading Comprehension</h2>
+            
+            <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg mb-6 leading-relaxed">
+                <h3 class="font-bold text-lg mb-2">William's Typical Day</h3>
+                <p class="mb-2">William is a high school student who leads a very busy life. Every morning, he wakes up at 6:30 AM to prepare for the day. He usually has a quick breakfast, which often consists of cereal and a glass of orange juice. After breakfast, he catches the bus to school at 7:15 AM. The ride takes about thirty minutes, so he uses this time to review his notes or listen to music.</p>
+                <p class="mb-2">School starts at 8:00 AM. William’s favorite subject is history because he loves learning about the past. However, he finds mathematics quite difficult. Fortunately, his teacher is very helpful and explains the concepts clearly. He has five classes before lunch, which is at 12:30 PM. He usually eats a sandwich and talks with his friends in the cafeteria.</p>
+                <p class="mb-2">In the afternoon, William has two more classes. When school finishes at 3:00 PM, he doesn't go straight home. He is part of the school soccer team, so he attends practice twice a week. On the other days, he goes to the library to finish his homework. He prefers doing his homework at school because it is quieter than his house.</p>
+                <p>William usually gets home around 5:30 PM. He helps his mother prepare dinner. They eat together as a family at 7:00 PM. After dinner, William likes to relax. He sometimes watches a television show or plays video games with his younger brother. By 9:30 PM, he is usually very tired. He packs his backpack for the next day, brushes his teeth, and goes to bed. He reads a book for a few minutes before falling asleep, ready to start all over again the next day.</p>
+            </div>
+
+            <div id="mcq-container-5" class="space-y-6 mb-6">
+                <!-- Generated via JS -->
+            </div>
+
+            <div class="flex justify-between items-center border-t pt-4 border-gray-200 dark:border-gray-700">
+                <button onclick="nav('sec-4')" class="text-blue-600 dark:text-blue-400 font-medium"><i class="fas fa-arrow-left mr-1"></i> Back</button>
+                <div class="space-x-2">
+                    <button onclick="checkAct5()" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded">Check Answers</button>
+                    <button onclick="nav('sec-6')" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">Next <i class="fas fa-arrow-right ml-1"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity 6: Scrambled Sentences -->
+        <section id="sec-6" class="section-container">
+            <h2 class="text-2xl font-bold mb-4">Activity 6: Sentence Formation</h2>
+            <p class="mb-4">Click words from the top pool to move them to the bottom box to form a correct sentence. Click words in the bottom box to return them. Click the speaker icon to hear the sentence.</p>
+            
+            <div id="sentences-container" class="space-y-8 mb-6">
+                <!-- Generated via JS -->
+            </div>
+
+            <div class="flex justify-between items-center border-t pt-4 border-gray-200 dark:border-gray-700">
+                <button onclick="nav('sec-5')" class="text-blue-600 dark:text-blue-400 font-medium"><i class="fas fa-arrow-left mr-1"></i> Back</button>
+                <div class="space-x-2">
+                    <button onclick="checkAct6()" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded">Check Answers</button>
+                    <button onclick="nav('sec-7')" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">Next <i class="fas fa-arrow-right ml-1"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity 7: Cloze text & Questions -->
+        <section id="sec-7" class="section-container">
+            <h2 class="text-2xl font-bold mb-4">Activity 7: William’s Three Resolutions</h2>
+            
+            <div class="mb-6 flex flex-col md:flex-row gap-6">
+                <img src="Image4.jpg" onerror="this.src='https://placehold.co/400x300/f59e0b/ffffff?text=Image+4'" class="rounded shadow md:w-1/3 object-cover h-48">
+                <div class="flex-grow">
+                    <p class="mb-2 font-semibold">Listen to the audio and fill in the missing words.</p>
+                    <audio src="Audio1.mp3" controls class="w-full mb-4"></audio>
+                </div>
+            </div>
+
+            <div id="cloze-container" class="bg-white dark:bg-gray-700 p-6 rounded shadow mb-8 leading-loose text-lg">
+                <!-- Generated via JS -->
+            </div>
+
+            <h3 class="text-xl font-bold mb-4">Multiple-Choice Questions</h3>
+            <div id="mcq-container-7" class="space-y-6 mb-6">
+                <!-- Generated via JS -->
+            </div>
+
+            <div class="flex justify-between items-center border-t pt-4 border-gray-200 dark:border-gray-700">
+                <button onclick="nav('sec-6')" class="text-blue-600 dark:text-blue-400 font-medium"><i class="fas fa-arrow-left mr-1"></i> Back</button>
+                <div class="space-x-2">
+                    <button onclick="checkAct7()" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded">Check Answers</button>
+                    <button onclick="submitWorksheet()" class="bg-purple-600 hover:bg-purple-700 text-white py-2 px-6 rounded font-bold shadow-lg shiny-blue">Submit <i class="fas fa-paper-plane ml-1"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="results-section" class="section-container">
+            <div class="text-center mb-8 no-print">
+                <h2 class="text-3xl font-bold text-green-600 dark:text-green-400">Worksheet Complete!</h2>
+                <p class="text-lg mt-2">Here are your results, <span id="res-name" class="font-bold"></span>.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="bg-white dark:bg-gray-700 p-6 rounded shadow-lg">
+                    <h3 class="text-xl font-bold mb-4 text-center">Score Breakdown</h3>
+                    <canvas id="scoreChart"></canvas>
+                </div>
+                <div class="bg-white dark:bg-gray-700 p-6 rounded shadow-lg flex flex-col justify-center items-center">
+                    <h3 class="text-xl font-bold mb-2">Overall Score</h3>
+                    <div class="text-6xl font-bold text-blue-600 dark:text-blue-400" id="overall-score">0%</div>
+                    <p id="overall-feedback" class="mt-4 text-center text-lg italic"></p>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 dark:bg-blue-900 p-6 rounded shadow-lg mb-8">
+                <h3 class="text-xl font-bold mb-4">Specific Recommendations</h3>
+                <ul id="recommendations-list" class="list-disc pl-6 space-y-2 text-sm md:text-base">
+                    <!-- Populated via JS -->
+                </ul>
+            </div>
+
+            <div class="text-center no-print">
+                <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded shadow font-bold"><i class="fas fa-print mr-2"></i> Print Results</button>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- State ---
+        let currentSection = 0;
+        const totalSections = 7;
+        let scores = { act1: 0, act2: 0, act3: 0, act4: 0, act5: 0, act6: 0, act7: 0 };
+        let maxScores = { act1: 1, act2: 1, act3: 1, act4: 14, act5: 6, act6: 15, act7: 20 }; // approximations
+        
+        // --- Navigation ---
+        function nav(sectionId) {
+            document.querySelectorAll('.section-container').forEach(el => el.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Update Progress
+            let secNum = sectionId === 'sec-intro' ? 0 : (sectionId === 'results-section' ? 8 : parseInt(sectionId.replace('sec-', '')));
+            let pct = (secNum / 8) * 100;
+            document.getElementById('progress-bar').style.width = pct + '%';
+        }
+
+        // --- Theme Toggle ---
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        // --- Utility ---
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // --- Puzzle Logic (Activities 2 & 3) ---
+        let puzzles = { 2: [], 3: [] };
+        let timers = { 2: null, 3: null };
+        let times = { 2: 0, 3: 0 };
+
+        function initPuzzle(id) {
+            clearInterval(timers[id]);
+            times[id] = 0;
+            document.getElementById(`timer${id}`).innerText = "00:00";
+            timers[id] = setInterval(() => {
+                times[id]++;
+                let m = String(Math.floor(times[id] / 60)).padStart(2, '0');
+                let s = String(times[id] % 60).padStart(2, '0');
+                document.getElementById(`timer${id}`).innerText = `${m}:${s}`;
+            }, 1000);
+
+            let board = document.getElementById(`puzzle-board-${id}`);
+            board.innerHTML = '';
+            let pieces = [];
+            let imgUrl = id === 2 ? "https://placehold.co/400x400/10b981/ffffff?text=Image+2" : "https://placehold.co/400x400/8b5cf6/ffffff?text=Image+3";
+            // Check if local image exists, else use placeholder (simulated)
+            
+            for(let i=0; i<16; i++) {
+                let x = (i % 4) * 33.333;
+                let y = Math.floor(i / 4) * 33.333;
+                pieces.push({ id: i, x: x, y: y });
+            }
+            let shuffled = shuffle([...pieces]);
+            puzzles[id] = shuffled;
+
+            shuffled.forEach((p, idx) => {
+                let div = document.createElement('div');
+                div.className = 'puzzle-piece';
+                div.style.backgroundImage = `url(${id===2 ? 'Image2.jpg' : 'Image3.jpg'}), url(${imgUrl})`;
+                div.style.backgroundPosition = `${p.x}% ${p.y}%`;
+                div.dataset.index = idx;
+                div.dataset.correctId = p.id;
+                div.onclick = () => swapPiece(id, idx);
+                board.appendChild(div);
+            });
+        }
+
+        let selectedPiece = null;
+        function swapPiece(puzzleId, idx) {
+            let board = document.getElementById(`puzzle-board-${puzzleId}`);
+            let pieces = board.children;
+            
+            if (selectedPiece === null) {
+                selectedPiece = idx;
+                pieces[idx].style.border = '2px solid red';
+            } else {
+                // Swap data
+                let temp = puzzles[puzzleId][selectedPiece];
+                puzzles[puzzleId][selectedPiece] = puzzles[puzzleId][idx];
+                puzzles[puzzleId][idx] = temp;
+                
+                // Re-render
+                pieces[selectedPiece].style.border = '1px solid #fff';
+                
+                pieces[selectedPiece].style.backgroundPosition = `${puzzles[puzzleId][selectedPiece].x}% ${puzzles[puzzleId][selectedPiece].y}%`;
+                pieces[selectedPiece].dataset.correctId = puzzles[puzzleId][selectedPiece].id;
+                
+                pieces[idx].style.backgroundPosition = `${puzzles[puzzleId][idx].x}% ${puzzles[puzzleId][idx].y}%`;
+                pieces[idx].dataset.correctId = puzzles[puzzleId][idx].id;
+                
+                selectedPiece = null;
+                checkPuzzleWin(puzzleId);
+            }
+        }
+
+        function checkPuzzleWin(id) {
+            let win = puzzles[id].every((p, i) => p.id === i);
+            if(win) {
+                clearInterval(timers[id]);
+                alert("Puzzle Completed!");
+            }
+        }
+
+        initPuzzle(2);
+        initPuzzle(3);
+
+        // --- Activity 4: C1 Conversation ---
+        const convData = [
+            { a: "I've been contemplating our respective daily grinds lately. How does your typical day unfold?", b: "It usually commences with a rigorous morning routine, though currently, I'm navigating a rather chaotic project phase." },
+            { a: "Fascinating. I tend to stick to a rigid schedule. Have you been managing to maintain a work-life balance?", b: "To be frank, I've been struggling with that recently. I'm actively trying to delineate my personal time more effectively." },
+            { a: "That's crucial for longevity. What are you prioritizing at this precise moment?", b: "I'm currently streamlining our internal communication protocols to mitigate recurrent delays." },
+            { a: "An ambitious endeavor. Have you encountered significant resistance from the team?", b: "Surprisingly, they've been quite receptive. We have implemented several agile methodologies over the past fortnight." },
+            { a: "Excellent. I consistently advocate for adaptable frameworks. What's the immediate next step?", b: "Presently, I am drafting a comprehensive proposal to present at the executive briefing tomorrow." },
+            { a: "I wish you the utmost success with that. Are you incorporating the latest quarterly metrics?", b: "Indeed. I have thoroughly analyzed the data, and it paints a rather optimistic trajectory for the upcoming fiscal year." },
+            { a: "That aligns with my recent observations. What do you generally do to decompress after such intense sessions?", b: "I usually engage in some form of intense physical exertion, like squash, though I haven't played in weeks." },
+            { a: "You really should prioritize that. Mental fatigue accumulates insidiously.", b: "You make a valid point. I am resolving to schedule dedicated downtime starting this weekend." },
+            { a: "A commendable resolution. Have you had the opportunity to review the new industry regulations yet?", b: "I have merely skimmed the executive summary; I intend to delve into the minutiae later this evening." },
+            { a: "It requires meticulous attention. I am currently consulting with the legal department regarding its implications.", b: "That's a prudent approach. Let's reconvene once we've both fully digested the material." },
+            { a: "Agreed. Speaking of reconvening, have you touched base with the overseas affiliates lately?", b: "I correspond with them routinely, but I am actually hosting a virtual summit with them as we speak." },
+            { a: "I shan't detain you any longer then. One final inquiry: have you finalized the vendor contracts?", b: "I have successfully negotiated the terms, and the finalized documents are pending final signatures." },
+            { a: "Stellar work. I appreciate your unwavering diligence.", b: "Thank you. I strive to maintain an optimal standard of operational efficiency." },
+            { a: "It certainly shows. Let's orchestrate a formal debriefing later this week.", b: "Absolutely. I will have my assistant synchronize our calendars. Until then." }
+        ];
+
+        let bOptions = shuffle(convData.map(d => d.b));
+        
+        function renderAct4() {
+            let container = document.getElementById('conversation-container');
+            convData.forEach((d, i) => {
+                let div = document.createElement('div');
+                div.className = "flex flex-col mb-4";
+                div.innerHTML = `
+                    <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-tr-lg rounded-bl-lg rounded-br-lg w-4/5 self-start shadow-sm border border-blue-200 dark:border-blue-800 mb-2">
+                        <span class="font-bold text-blue-800 dark:text-blue-300">Person A:</span> ${d.a}
+                    </div>
+                    <div class="bg-green-100 dark:bg-green-900 p-3 rounded-tl-lg rounded-bl-lg rounded-br-lg w-4/5 self-end shadow-sm border border-green-200 dark:border-green-800 flex items-center gap-2">
+                        <span class="font-bold text-green-800 dark:text-green-300">Person B:</span> 
+                        <select class="act4-select flex-grow p-1 rounded shiny-blue text-sm dark:bg-gray-800" data-correct="${d.b}" onchange="updateAct4Selects()">
+                            <option value="">-- Select Response --</option>
+                            ${bOptions.map(opt => `<option value="${opt.replace(/"/g, '&quot;')}">${opt}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        function updateAct4Selects() {
+            let selects = document.querySelectorAll('.act4-select');
+            let selectedVals = Array.from(selects).map(s => s.value).filter(v => v !== "");
+            
+            selects.forEach(sel => {
+                Array.from(sel.options).forEach(opt => {
+                    if(opt.value !== "" && selectedVals.includes(opt.value) && sel.value !== opt.value) {
+                        opt.disabled = true;
+                        opt.text = "--- Selected ---";
+                    } else {
+                        opt.disabled = false;
+                        opt.text = opt.value;
+                    }
+                });
+            });
+        }
+        renderAct4();
+
+        // --- Activity 5 & 7 MCQs ---
+        const act5Questions = [
+            { q: "What time does William wake up?", a: ["6:30 AM", "7:15 AM", "8:00 AM", "5:30 PM"], ans: "6:30 AM" },
+            { q: "What does William usually have for breakfast?", a: ["Cereal and orange juice", "Eggs and bacon", "Pancakes and milk", "Nothing"], ans: "Cereal and orange juice" },
+            { q: "Why is history his favorite subject?", a: ["He loves learning about the past.", "The teacher is very helpful.", "It is easy.", "He has it before lunch."], ans: "He loves learning about the past." },
+            { q: "What does William do right after school finishes at 3:00 PM?", a: ["Attends soccer practice or goes to the library.", "Goes straight home.", "Eats dinner with his family.", "Plays video games."], ans: "Attends soccer practice or goes to the library." },
+            { q: "Where does he prefer to do his homework?", a: ["At school because it is quieter.", "At home in his room.", "In the cafeteria.", "On the bus."], ans: "At school because it is quieter." },
+            { q: "What does he do right before falling asleep?", a: ["Reads a book.", "Brushes his teeth.", "Packs his backpack.", "Watches television."], ans: "Reads a book." }
+        ];
+
+        const act7Questions = [
+            { q: "1. Why is William writing to Bill?", a: ["To invite him to a birthday party", "To ask him to finish a school project", "To describe three resolutions he has made", "To explain why he is changing schools"], ans: "To describe three resolutions he has made" },
+            { q: "2. How has William been preparing to improve at school?", a: ["He has been studying for thirty minutes every evening since January.", "He has been avoiding difficult subjects.", "He has been studying only on weekends.", "He has been asking Bill to do his homework."], ans: "He has been studying for thirty minutes every evening since January." },
+            { q: "3. What did William do yesterday?", a: ["He returned a wallet to its owner.", "He completed his science test.", "He helped his classmate study English.", "He cleaned the kitchen while his father rested."], ans: "He cleaned the kitchen while his father rested." },
+            { q: "4. What does being more virtuous mean to William?", a: ["Being popular, wealthy, and competitive", "Being honest, patient, and kind", "Being quiet and avoiding other people", "Being perfect and never making mistakes"], ans: "Being honest, patient, and kind" },
+            { q: "5. Which sentence from the email uses the present progressive?", a: ["“I have already improved my grades.”", "“We enjoyed a quiet evening together.”", "“I am learning to listen without interrupting.”", "“My parents work hard, so I help with dinner and keep my room tidy.”"], ans: "“I am learning to listen without interrupting.”" },
+            { q: "6. Which sentence from the email uses the present perfect continuous?", a: ["“I have been practicing patience when things go wrong.”", "“I have learned that small choices matter.”", "“I sometimes make mistakes, and I try again instead of giving up.”", "“Last Monday, I found a wallet and returned it to its owner.”"], ans: "“I have been practicing patience when things go wrong.”" }
+        ];
+
+        function renderMCQs(containerId, questions, actPrefix) {
+            let container = document.getElementById(containerId);
+            questions.forEach((q, i) => {
+                let shuffledOpts = shuffle([...q.a]);
+                let div = document.createElement('div');
+                div.className = "bg-white dark:bg-gray-800 p-4 rounded shadow border dark:border-gray-700";
+                
+                let optsHtml = shuffledOpts.map((opt, j) => `
+                    <label class="flex items-center space-x-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer">
+                        <input type="radio" name="${actPrefix}-q${i}" value="${opt.replace(/"/g, '&quot;')}" class="${actPrefix}-radio w-4 h-4 text-blue-600 shiny-blue">
+                        <span>${opt}</span>
+                    </label>
+                `).join('');
+
+                div.innerHTML = `
+                    <p class="font-bold mb-2">${i+1}. ${q.q}</p>
+                    <div class="space-y-1 pl-4" id="${actPrefix}-q${i}-opts">
+                        ${optsHtml}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        renderMCQs('mcq-container-5', act5Questions, 'act5');
+        renderMCQs('mcq-container-7', act7Questions, 'act7');
+
+        // --- Activity 6: Sentences ---
+        const act6Sentences = [
+            "I study English every day because I want to travel.",
+            "She has visited London twice, and she loved it.",
+            "They are playing soccer while we are watching a movie.",
+            "He has been working here since he graduated from college.",
+            "We usually eat breakfast at home, but today we ate out.",
+            "The train leaves at eight, so we must hurry up.",
+            "I have finished my homework, and now I can relax.",
+            "She is reading a book, and her brother is sleeping.",
+            "I have been learning Spanish for three years, but it is hard.",
+            "He likes playing tennis, but he does not like swimming.",
+            "They have bought a new house, and they are moving soon.",
+            "She works in a bank, and she enjoys her job.",
+            "I am cooking dinner while my husband is setting the table.",
+            "We have been waiting for the bus for twenty minutes.",
+            "He goes to the gym every morning before he starts work."
+        ];
+
+        function renderAct6() {
+            let container = document.getElementById('sentences-container');
+            act6Sentences.forEach((s, i) => {
+                let words = shuffle(s.split(' '));
+                let div = document.createElement('div');
+                div.className = "bg-white dark:bg-gray-800 p-4 rounded shadow border dark:border-gray-700";
+                
+                div.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-gray-500">Sentence ${i+1}</span>
+                        <button onclick="speakSentence('${s.replace(/'/g, "\\'")}')" class="text-blue-500 hover:text-blue-700"><i class="fas fa-volume-up"></i></button>
+                    </div>
+                    <div id="act6-pool-${i}" class="word-pool mb-2 rounded shiny-blue bg-gray-50 dark:bg-gray-900">
+                        ${words.map((w, j) => `<span class="word-tile shadow-sm" onclick="moveWord(this, 'act6-target-${i}')" data-word="${w}">${w}</span>`).join('')}
+                    </div>
+                    <div id="act6-target-${i}" class="word-target rounded shiny-blue bg-blue-50 dark:bg-blue-900/20" data-correct="${s}"></div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        function moveWord(el, targetId) {
+            let target = document.getElementById(targetId);
+            let pool = el.parentElement.id.includes('pool') ? el.parentElement : document.getElementById(el.parentElement.id.replace('target', 'pool'));
+            
+            if (el.parentElement.id.includes('pool')) {
+                target.appendChild(el);
+                el.onclick = () => moveWord(el, pool.id);
+            } else {
+                pool.appendChild(el);
+                el.onclick = () => moveWord(el, target.id);
+            }
+        }
+
+        function speakSentence(text) {
+            let utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            speechSynthesis.speak(utterance);
+        }
+        renderAct6();
+
+        // --- Activity 7: Cloze ---
+        const clozeText = "Dear Bill, How are you? I am writing to tell you about three resolutions I have made this year. Last year, I often wasted time, argued at home, and ignored opportunities to help others. Now I want to change those habits and become a better person. First, I have decided to do better at school. I review my notes every afternoon and ask questions when I do not understand something. At the moment, I am preparing for an important science test. I have been studying for thirty minutes every evening since January. Last week, I finished a difficult project before the deadline. I have already improved my grades, but I still need more practice in mathematics. Second, I want to be a better son. My parents work hard, so I help with dinner and keep my room tidy. I am learning to listen without interrupting. I have been helping my mother wash the dishes regularly, and I have stopped complaining about chores. Yesterday, I cleaned the kitchen while my father rested. We enjoyed a quiet evening together, and I felt proud of my effort. Third, I have promised myself to be more virtuous. For me, that means being honest, patient, and kind. I have been practicing patience when things go wrong. These days, I am also helping a classmate who finds English difficult. Last Monday, I found a wallet and returned it to its owner. I have learned that small choices matter. These resolutions are not always easy, but I am making progress. I sometimes make mistakes, and I try again instead of giving up. What resolutions have you made this year? I hope we can encourage each other and celebrate our progress together. Your friendship means a lot to me, especially when I need encouragement to keep trying every day. Your friend, William";
+        let clozeWords = clozeText.split(' ');
+        let clozeAnswers = [];
+
+        function renderCloze() {
+            let container = document.getElementById('cloze-container');
+            let html = '';
+            for(let i=0; i<clozeWords.length; i++) {
+                let w = clozeWords[i];
+                let cleanW = w.replace(/[.,?]/g, '');
+                let punc = w.substring(cleanW.length);
+                
+                if ((i + 1) % 20 === 0) {
+                    html += `<input type="text" class="cloze-input w-24 mx-1 p-1 text-center border-b-2 border-blue-500 bg-transparent outline-none shiny-blue font-bold text-blue-700 dark:text-blue-300" data-ans="${cleanW}"> ${punc} `;
+                    clozeAnswers.push(cleanW.toLowerCase());
+                } else {
+                    html += w + ' ';
+                }
+            }
+            container.innerHTML = html;
+            maxScores.act7 = clozeAnswers.length + 6; // blanks + MCQs
+        }
+        renderCloze();
+
+
+        // --- Checking Functions ---
+        function disableSection(secId) {
+            let sec = document.getElementById(secId);
+            sec.querySelectorAll('input, textarea, select, button.bg-green-600').forEach(el => el.disabled = true);
+            sec.querySelectorAll('.word-tile').forEach(el => el.onclick = null);
+        }
+
+        function checkAct1() {
+            let notes = document.getElementById('act1-notes').value;
+            if(notes.length > 10) scores.act1 = 1;
+            document.getElementById('act1-notes').classList.add(scores.act1 ? 'bg-green-100' : 'bg-red-100');
+            disableSection('sec-1');
+        }
+
+        function checkAct2() { scores.act2 = 1; disableSection('sec-2'); clearInterval(timers[2]); }
+        function checkAct3() { scores.act3 = 1; disableSection('sec-3'); clearInterval(timers[3]); }
+
+        function checkAct4() {
+            let selects = document.querySelectorAll('.act4-select');
+            let score = 0;
+            selects.forEach(sel => {
+                if(sel.value === sel.dataset.correct) {
+                    score++;
+                    sel.classList.add('border-green-500', 'bg-green-100');
+                } else {
+                    sel.classList.add('border-red-500', 'bg-red-100');
+                }
+            });
+            scores.act4 = score;
+            disableSection('sec-4');
+        }
+
+        function checkAct5() {
+            let score = 0;
+            act5Questions.forEach((q, i) => {
+                let selected = document.querySelector(`input[name="act5-q${i}"]:checked`);
+                let optsDiv = document.getElementById(`act5-q${i}-opts`);
+                if(selected && selected.value === q.ans) {
+                    score++;
+                    optsDiv.classList.add('border-l-4', 'border-green-500');
+                } else {
+                    optsDiv.classList.add('border-l-4', 'border-red-500');
+                }
+            });
+            scores.act5 = score;
+            disableSection('sec-5');
+        }
+
+        function checkAct6() {
+            let score = 0;
+            act6Sentences.forEach((s, i) => {
+                let target = document.getElementById(`act6-target-${i}`);
+                let words = Array.from(target.children).map(c => c.dataset.word).join(' ');
+                if(words === s) {
+                    score++;
+                    target.classList.add('bg-green-100', 'border-green-500');
+                } else {
+                    target.classList.add('bg-red-100', 'border-red-500');
+                }
+            });
+            scores.act6 = score;
+            disableSection('sec-6');
+        }
+
+        function checkAct7() {
+            let score = 0;
+            // check cloze
+            document.querySelectorAll('.cloze-input').forEach(inp => {
+                if(inp.value.toLowerCase().trim() === inp.dataset.ans.toLowerCase()) {
+                    score++;
+                    inp.classList.add('text-green-600', 'border-green-600');
+                } else {
+                    inp.classList.add('text-red-600', 'border-red-600');
+                }
+            });
+            // check mcq
+            act7Questions.forEach((q, i) => {
+                let selected = document.querySelector(`input[name="act7-q${i}"]:checked`);
+                let optsDiv = document.getElementById(`act7-q${i}-opts`);
+                if(selected && selected.value === q.ans) {
+                    score++;
+                    optsDiv.classList.add('border-l-4', 'border-green-500');
+                } else {
+                    optsDiv.classList.add('border-l-4', 'border-red-500');
+                }
+            });
+            scores.act7 = score;
+            disableSection('sec-7');
+        }
+
+        // --- Submit and Results ---
+        function submitWorksheet() {
+            // Auto check un-checked sections
+            ['1','2','3','4','5','6','7'].forEach(i => {
+                if(!document.getElementById(`sec-${i}`).querySelector('button.bg-green-600').disabled) {
+                    window[`checkAct${i}`]();
+                }
+            });
+
+            let name = document.getElementById('student-name').value || "Student";
+            document.getElementById('res-name').innerText = name;
+            
+            let totalScore = Object.values(scores).reduce((a,b)=>a+b, 0);
+            let totalMax = Object.values(maxScores).reduce((a,b)=>a+b, 0);
+            let pct = Math.round((totalScore / totalMax) * 100);
+            
+            document.getElementById('overall-score').innerText = `${pct}%`;
+            
+            let feedback = document.getElementById('overall-feedback');
+            if(pct >= 90) feedback.innerText = "Excellent work! Your speaking and fluency comprehension is top-notch.";
+            else if(pct >= 70) feedback.innerText = "Good job! You have a solid grasp of the material, but there is room for improvement.";
+            else feedback.innerText = "Keep practicing! Review the recommendations below to improve your skills.";
+
+            // Recommendations based on scores
+            let recs = [];
+            if(scores.act1 === 0) recs.push("Practice taking concise notes while watching informational videos.");
+            else recs.push("Great note-taking! Continue identifying main ideas in audio-visual material.");
+            
+            recs.push("For image descriptions (A2), ensure you practice using the present continuous to describe actions.");
+            
+            if(scores.act4 < 10) recs.push("Review C1 level vocabulary and conversational structures, focusing on professional exchanges.");
+            else recs.push("Your conversational logic in complex professional dialogues is excellent.");
+            
+            if(scores.act5 < 4) recs.push("Read more A2-B1 texts focusing on daily routines and time expressions.");
+            
+            if(scores.act6 < 10) recs.push("Practice sentence structure. Pay attention to subject-verb agreement and conjunctions in compound sentences.");
+            else recs.push("Strong sentence formation skills! You successfully navigated complex and compound structures.");
+            
+            if(scores.act7 < (maxScores.act7 * 0.6)) recs.push("Listen to more English audio to improve your listening comprehension and dictation (cloze exercises).");
+            else recs.push("Excellent listening comprehension! You accurately identified missing vocabulary in context.");
+            
+            while(recs.length < 8) recs.push("Continue practicing daily to maintain fluency and confidence.");
+            
+            document.getElementById('recommendations-list').innerHTML = recs.map(r => `<li>${r}</li>`).join('');
+
+            nav('results-section');
+            renderChart();
+        }
+
+        function renderChart() {
+            let ctx = document.getElementById('scoreChart').getContext('2d');
+            let acts = ['Notes', 'Image 1', 'Image 2', 'Conversation', 'Reading', 'Sentences', 'Cloze+MCQ'];
+            let data = [
+                (scores.act1/maxScores.act1)*100, 
+                (scores.act2/maxScores.act2)*100, 
+                (scores.act3/maxScores.act3)*100, 
+                (scores.act4/maxScores.act4)*100, 
+                (scores.act5/maxScores.act5)*100, 
+                (scores.act6/maxScores.act6)*100, 
+                (scores.act7/maxScores.act7)*100
+            ];
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: acts,
+                    datasets: [{
+                        label: 'Score Percentage per Activity',
+                        data: data,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 159, 64, 0.6)',
+                            'rgba(199, 199, 199, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(199, 199, 199, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: { beginAtZero: true, max: 100 }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
