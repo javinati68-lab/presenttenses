@@ -155,7 +155,7 @@
             <textarea id="act2-notes" rows="4" class="w-full p-3 bg-white dark:bg-gray-700 shiny-blue text-black dark:text-white mb-4" placeholder="Describe the image..."></textarea>
             
             <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded mb-6">
-                <h4 class="font-bold text-sm mb-2">Sentence Frames (A2 Level):</h4>
+                <h4 class="font-bold text-sm mb-2">Sentence Frames:</h4>
                 <ul class="list-disc pl-5 text-sm space-y-1">
                     <li>In this picture, I can see...</li>
                     <li>There is / There are...</li>
@@ -197,7 +197,7 @@
             <textarea id="act3-notes" rows="4" class="w-full p-3 bg-white dark:bg-gray-700 shiny-blue text-black dark:text-white mb-4" placeholder="Describe the image..."></textarea>
             
             <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded mb-6">
-                <h4 class="font-bold text-sm mb-2">Sentence Frames (A2 Level):</h4>
+                <h4 class="font-bold text-sm mb-2">Sentence Frames:</h4>
                 <ul class="list-disc pl-5 text-sm space-y-1">
                     <li>In this picture, I can see...</li>
                     <li>There is / There are...</li>
@@ -221,7 +221,7 @@
 
         <!-- Activity 4: Conversation -->
         <section id="sec-4" class="section-container">
-            <h2 class="text-2xl font-bold mb-4">Activity 4: C1 Conversation</h2>
+            <h2 class="text-2xl font-bold mb-4">Activity 4: Conversation</h2>
             <p class="mb-6">Complete the conversation by selecting the correct responses for Person B. Options will be crossed out once selected.</p>
             
             <div id="conversation-container" class="space-y-4 mb-6 text-sm md:text-base">
@@ -459,22 +459,15 @@
         initPuzzle(2);
         initPuzzle(3);
 
-        // --- Activity 4: C1 Conversation ---
+        // --- Activity 4: Conversation ---
         const convData = [
-            { a: "I've been contemplating our respective daily grinds lately. How does your typical day unfold?", b: "It usually commences with a rigorous morning routine, though currently, I'm navigating a rather chaotic project phase." },
-            { a: "Fascinating. I tend to stick to a rigid schedule. Have you been managing to maintain a work-life balance?", b: "To be frank, I've been struggling with that recently. I'm actively trying to delineate my personal time more effectively." },
-            { a: "That's crucial for longevity. What are you prioritizing at this precise moment?", b: "I'm currently streamlining our internal communication protocols to mitigate recurrent delays." },
-            { a: "An ambitious endeavor. Have you encountered significant resistance from the team?", b: "Surprisingly, they've been quite receptive. We have implemented several agile methodologies over the past fortnight." },
-            { a: "Excellent. I consistently advocate for adaptable frameworks. What's the immediate next step?", b: "Presently, I am drafting a comprehensive proposal to present at the executive briefing tomorrow." },
-            { a: "I wish you the utmost success with that. Are you incorporating the latest quarterly metrics?", b: "Indeed. I have thoroughly analyzed the data, and it paints a rather optimistic trajectory for the upcoming fiscal year." },
-            { a: "That aligns with my recent observations. What do you generally do to decompress after such intense sessions?", b: "I usually engage in some form of intense physical exertion, like squash, though I haven't played in weeks." },
-            { a: "You really should prioritize that. Mental fatigue accumulates insidiously.", b: "You make a valid point. I am resolving to schedule dedicated downtime starting this weekend." },
-            { a: "A commendable resolution. Have you had the opportunity to review the new industry regulations yet?", b: "I have merely skimmed the executive summary; I intend to delve into the minutiae later this evening." },
-            { a: "It requires meticulous attention. I am currently consulting with the legal department regarding its implications.", b: "That's a prudent approach. Let's reconvene once we've both fully digested the material." },
-            { a: "Agreed. Speaking of reconvening, have you touched base with the overseas affiliates lately?", b: "I correspond with them routinely, but I am actually hosting a virtual summit with them as we speak." },
-            { a: "I shan't detain you any longer then. One final inquiry: have you finalized the vendor contracts?", b: "I have successfully negotiated the terms, and the finalized documents are pending final signatures." },
-            { a: "Stellar work. I appreciate your unwavering diligence.", b: "Thank you. I strive to maintain an optimal standard of operational efficiency." },
-            { a: "It certainly shows. Let's orchestrate a formal debriefing later this week.", b: "Absolutely. I will have my assistant synchronize our calendars. Until then." }
+            { a: "Hi! How are you doing today?", b: "I am doing great, thank you. How are you?" },
+            { a: "I am fine. What do you usually do after school?", b: "I usually do my homework and then I play soccer with my friends." },
+            { a: "That sounds fun. What are you doing right now?", b: "I am studying for Mr. Rocha's English class. We have a test tomorrow." },
+            { a: "Oh, right! Have you finished the reading assignment?", b: "Yes, I have already read the chapter about daily routines." },
+            { a: "Have you been practicing your speaking skills lately?", b: "Yes, I have been talking in English with my sister every evening." },
+            { a: "That is a great idea. What did you do in class yesterday?", b: "We practiced conversations and played a fun vocabulary game." },
+            { a: "Mr. Rocha always plans fun activities. Well, I have to go now.", b: "Okay, see you tomorrow in grade 8! Have a good night." }
         ];
 
         let bOptions = shuffle(convData.map(d => d.b));
